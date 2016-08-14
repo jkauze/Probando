@@ -1,0 +1,124 @@
+#TEST ONE MORE SHIP with 2 slot
+import random
+tablero = []
+b0=0
+b1=0
+b2=0
+b3=0
+for x in range(0,5):
+  tablero.append(["O"] * 5)
+def print_tablero(tablero):
+  for fila in tablero:
+    print " ".join(fila)
+print "Juguemos a la batalla naval! \nREGLAS: \n Tendras 5 Turnos \n Hay 2 barcos (1 de 1 espacios y el otro de 2espacios) \n recuerda no salirte del oceano! \n una 'X' simboliza tu intento y una '@' que has acertado"
+print ""
+print_tablero(tablero)
+
+def fila_aleatoria(tablero):
+  return random.randint(0,len(tablero)-1)
+
+def columna_aleatoria(tablero):
+  return random.randint(0,len(tablero[0])-1)
+#Lucky, its to decide if the ship is vertical or horizontal #0 ir vertical and #1 is horizontal
+def fila_col(tablero):
+  return random.randint(0,1)
+
+barco_fila = fila_aleatoria(tablero)
+barco_columna = columna_aleatoria(tablero)
+barco_fila2 = fila_aleatoria(tablero)
+barco_columna2 = columna_aleatoria(tablero)
+extrafila=0
+extracol=0
+filacol=fila_col(tablero)
+
+if filacol==0 and barco_fila==4:
+	while barco_fila==4:
+		barco_fila=fila_aleatoria(tablero)
+	extrafila=barco_fila+1
+elif filacol==0 and barco_fila!=4:
+	extrafila=barco_fila+1 
+if filacol==1 and barco_columna==4:
+	while barco_columna==4:
+		barco_columna=columna_aleatoria(tablero)
+	extracol=barco_columna+1
+elif filacol==1 and barco_columna!=4:
+	extracol=barco_columna+1
+
+while barco_fila2 == barco_fila and barco_columna2 == barco_columna or (barco_fila2==extrafila and barco_columna2==barco_columna) or (barco_fila2==barco_fila and barco_columna2==extracol):
+	barco_fila2=fila_aleatoria(tablero)
+	barco_columna2=columna_aleatoria(tablero)
+trampa=raw_input("quieres saber la ubicacion de los barcos? escribe 'si' o 'no' ")
+print ""
+if trampa=='si':
+	print "Es mas divertido si lo intentas adivinar sin ver la ubicacion de los barcos!"
+	print":::::TRAMPA:::: la posicion del barco DOS es en  la fila %x columna %s"  % (barco_fila2, barco_columna2)
+	if extracol!=0:
+		print":::::TRAMPA:::: la posicion del barco UNO es en  la fila %x columna %s y %s"  % (barco_fila, barco_columna, extracol)
+	elif extrafila !=0:
+		print":::::TRAMPA:::: la posicion del barco UNO es en  la fila %x y %s columna %s "  % (barco_fila, extrafila, barco_columna)
+else:
+	print "Asi me gusta! SUERTE!"
+print ""
+
+for turn in range(6):
+    print "Turno %s" % turn
+    print ""
+    adivina_fila = input("Adivina fila: ")
+    adivina_columna = input("Adivina columna: ")
+    if adivina_fila == barco_fila and adivina_columna == barco_columna or (adivina_fila == barco_fila and adivina_columna==extracol and filacol==1):
+	    if adivina_columna==barco_columna:
+	    	if b0==1:
+	    		print "-------Ya dijiste esa "
+	    		print_tablero(tablero)
+	    	else:	
+		   		print "!!!Has acertado!!!"
+				tablero[adivina_fila][adivina_columna] = "@"
+				print_tablero(tablero)
+				b0=b0+1
+
+	    elif adivina_columna==extracol:
+		   	print "!!!Has acertado!!!"
+			tablero[adivina_fila][adivina_columna] = "@"
+			print_tablero(tablero)
+			b3=b3+1
+
+    elif adivina_columna==barco_columna and adivina_fila==extrafila and filacol==0:
+	   	if b1==1:
+	   		print "-------Ya dijiste esa-------"
+	   		print_tablero(tablero)
+	   	else:
+	   		print "!!!Has acertado!!!"
+			tablero[adivina_fila][adivina_columna] = "@"
+			print_tablero(tablero)
+			b1=b1+1
+
+    elif adivina_fila == barco_fila2 and adivina_columna == barco_columna2:
+    	if b2==1:
+    		print "-------Ya dijiste esa-------"
+        else:
+	      print "!!!Hundiste mi barco pequeno!!!"
+	      tablero[adivina_fila][adivina_columna] = "@"
+	      b2=1
+	      print_tablero(tablero)
+
+	if (b3==1 or b1==1) and b0==1  and b2==1:
+		print "ganaste"
+		break
+    else:
+      if (adivina_fila < 0 or adivina_fila > 4) or (adivina_columna < 0 or adivina_columna > 4):
+        print "-------Huy, eso ni siquiera esta en el oceano-------"
+      elif(tablero[adivina_fila][adivina_columna] == "X") or (tablero[adivina_fila][adivina_columna] == "@"):
+        print "-------Ya dijiste esa-------"
+          
+      else:
+      	print "-------No tocaste mi barco!-------"
+      	tablero[adivina_fila][adivina_columna] = "X"
+
+      print_tablero(tablero)
+
+    if turn==5:
+		print ""
+		print "-------Fin del juego :( -------" 
+		print "-------Asi quedo tu tablero-------"
+  		print_tablero(tablero)
+  		break
