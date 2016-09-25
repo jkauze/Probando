@@ -1,2 +1,1 @@
-# Probando
-Listado de Algunos Codigos
+Lista de Repositorios de ejercicios de SPOJ.COM
